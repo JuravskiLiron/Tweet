@@ -76,9 +76,12 @@ public class PostController : Controller
             return NotFound();
         
         var user = await _userManager.GetUserAsync(User);
-
+        _logger.LogInformation("post.UserId = {postUserId}, user.Id = {User.Id}", post.UserId, user.Id);
         if (post.UserId != user.Id)
+        {
+            _logger.LogWarning("post.UserId = {postUserId}, user.Id = {User.Id}", post.UserId, post.Id);
             return Forbid();
+        }
 
         //if  (ModelState.IsValid)
        // {

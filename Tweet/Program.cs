@@ -10,7 +10,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
 {
-    options.SignIn.RequireConfirmedEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
     options.Password.RequiredLength = 6;
 })
     .AddEntityFrameworkStores<ApplicationDBContext>()
@@ -18,7 +18,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
 
 builder.Services.ConfigureApplicationCookie(config =>
 {
-    config.Cookie.Name = "Tweet.Cookie";
+    config.Cookie.Name = "Cookie";
     config.LoginPath = "/Account/Login";
     config.AccessDeniedPath = "/Account/AccessDenied";
 });

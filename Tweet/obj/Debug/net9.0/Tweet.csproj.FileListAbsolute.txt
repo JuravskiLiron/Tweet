@@ -538,3 +538,4 @@ D:\projects\Tweet\Tweet\obj\Debug\net9.0\refint\Tweet.dll
 D:\projects\Tweet\Tweet\obj\Debug\net9.0\Tweet.pdb
 D:\projects\Tweet\Tweet\obj\Debug\net9.0\Tweet.genruntimeconfig.cache
 D:\projects\Tweet\Tweet\obj\Debug\net9.0\ref\Tweet.dll
+D:\projects\Tweet\Tweet\obj\Debug\net9.0\Tweet.sourcelink.json
