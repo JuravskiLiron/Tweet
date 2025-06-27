@@ -11,4 +11,6 @@ public class ApplicationUser : IdentityUser<int>
     public DateTime DateModified { get; set; }
     public bool ActiveAccount { get; set; }
     public int GenderId { get; set; }
+    public string Bio { get; set; }
+    public string AvatarPath { get; set; }
 }

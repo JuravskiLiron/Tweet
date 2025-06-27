@@ -22,12 +22,19 @@ public class PostController : Controller
     public async Task<IActionResult> Index()
     {
         var posts = await _postRepository.GetPostsAsync();
+        var user = await _userManager.GetUserAsync(User);
+        var result = new List<PostViewModel>();
+
+        foreach (var post in posts)
+        {
+            result.Add(new PostViewModel
+            {
+                Post = post,
+                
+            });
+        }
         
-        
-        
-        
-        
-        return View(posts);
+        return View(result);
     }
     
     
