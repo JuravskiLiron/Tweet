@@ -10,11 +10,14 @@ public class AccountController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private ILogger<AccountController> _logger;
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger)
+    private readonly IWebHostEnvironment _env;
+    
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger, IWebHostEnvironment env)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
+        _env = env;
     }
 
     [AllowAnonymous]
@@ -34,6 +37,34 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
+            
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var maxFileSizeInBytes = 2 * 1024 * 1024;
+            var extension = Path.GetExtension(model.Avatar.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                ModelState.AddModelError("Avatar", "only .jpg, .jpeg, .png, .gif");
+                return View(model);
+            }
+
+            if (model.Avatar.Length > maxFileSizeInBytes)
+            {
+                ModelState.AddModelError("Avatar", "max file size is " + maxFileSizeInBytes);
+                return View(model);
+            }
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.Avatar.FileName);
+            var uploadsPath = Path.Combine(_env.WebRootPath, "Uploads");
+            var filePath = Path.Combine(uploadsPath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.Avatar.CopyToAsync(stream);
+            }
+            
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -44,7 +75,9 @@ public class AccountController : Controller
                 DateCreated = DateTime.Now,
                 DateModified = DateTime.Now,
                 ActiveAccount = true,
-                GenderId = model.GenderId
+                GenderId = model.GenderId,
+                Bio = "Checl",
+                AvatarPath = "/Uploads/" + fileName,
             };
             
             var result = await _userManager.CreateAsync(user, model.Password);

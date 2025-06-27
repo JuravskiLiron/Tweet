@@ -169,6 +169,14 @@ namespace Tweet.Migrations
                     b.Property<bool>("ActiveAccount")
                         .HasColumnType("bit");
 
+                    b.Property<string>("AvatarPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");

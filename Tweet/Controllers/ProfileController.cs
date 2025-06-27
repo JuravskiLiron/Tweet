@@ -97,13 +97,14 @@ public class ProfileController : Controller
     public async Task<IActionResult> MyProfile()
     {
         var user = await _userManager.GetUserAsync(User);
-        var followers = await _followRepository.GetFollowingAsync(user.Id);
-        var following = await _followRepository.GetFollowingAsync(user.Id);
-
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
+        var followers = await _followRepository.GetFollowingAsync(user.Id);
+        var following = await _followRepository.GetFollowingAsync(user.Id);
+
+       
 
         var model = new MyProfileViewModel
         {
