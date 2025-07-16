@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tweet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae6e47676a6dfb3ea3603814883ff080771b6b3f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e7bd86db96849f4ed1f9772e1b9ed910789de04")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tweet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tweet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
