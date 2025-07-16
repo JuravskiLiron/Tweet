@@ -35,9 +35,10 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        /*
         if (ModelState.IsValid)
         {
-            
+
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
             var maxFileSizeInBytes = 2 * 1024 * 1024;
             var extension = Path.GetExtension(model.Avatar.FileName).ToLowerInvariant();
@@ -48,6 +49,11 @@ public class AccountController : Controller
                 return View(model);
             }
 
+            if (model.Avatar == null)
+            {
+                ModelState.AddModelError("Avatar", "Please select a valid avatar.");
+                return View(model);
+            }
             if (model.Avatar.Length > maxFileSizeInBytes)
             {
                 ModelState.AddModelError("Avatar", "max file size is " + maxFileSizeInBytes);
@@ -60,7 +66,7 @@ public class AccountController : Controller
             {
                 await model.Avatar.CopyToAsync(stream);
             }
-            
+
             if (!Directory.Exists(uploadsPath))
             {
                 Directory.CreateDirectory(uploadsPath);
@@ -76,10 +82,10 @@ public class AccountController : Controller
                 DateModified = DateTime.Now,
                 ActiveAccount = true,
                 GenderId = model.GenderId,
-                Bio = "Checl",
-                AvatarPath = "/Uploads/" + fileName,
+                Bio = "Check",
+                AvatarPath = "/Uploads/" + fileName
             };
-            
+
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -96,7 +102,65 @@ public class AccountController : Controller
         }
         _logger.LogWarning("Model state isnt valid(or other error");
         return View(model);
-    }
+        */
+        if (ModelState.IsValid)
+        {
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var maxFileSizeInBytes = 2 * 1024 * 1024; //2 MB
+            var extention = Path.GetExtension(model.Avatar.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(extention))
+            {
+                ModelState.AddModelError("Avatar", "only .jpg / .jpeg / .png / .gif files are allowed");
+                return View(model);
+            }
+            if (model.Avatar.Length > maxFileSizeInBytes)
+            {
+                ModelState.AddModelError("Avatar", "file size must be less then 2MB");
+                return View(model);
+            }
+            var uploadsPath = Path.Combine(_env.WebRootPath, "Uploads");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.Avatar.FileName);
+            var filePath = Path.Combine(uploadsPath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.Avatar.CopyToAsync(stream);
+            }
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                DateOfBirth = model.DateOfBirth,
+                DateCreated = DateTime.Now,
+                DateModified = DateTime.Now,
+                ActiveAccount = true,
+                GenderId = model.GenderId,
+                Bio = "check",
+                AvatarPath = "/Uploads/" + fileName
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "User");
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                _logger.LogInformation("User {Email} registered succesfully.", model.Email);
+                return RedirectToAction("Index", "Home");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+        }
+        _logger.LogWarning("Model state isn't valid(or other error)");
+        return View(model);
+}
 
     [HttpPost]
     [ValidateAntiForgeryToken]
