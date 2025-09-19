@@ -13,4 +13,6 @@ public class ApplicationUser : IdentityUser<int>
     public int GenderId { get; set; }
     public string Bio { get; set; }
     public string AvatarPath { get; set; }
+
+    public ICollection<Comment> Comments { get; set; }
 }

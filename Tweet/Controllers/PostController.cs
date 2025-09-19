@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Tweet.Models;
 using Tweet.Repository;
@@ -11,12 +12,15 @@ public class PostController : Controller
     private readonly IPostRepository _postRepository;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<PostController> _logger;
+    private readonly ILikeRepository _likeRepository;
+    public readonly ICommentRepository _commentRepository;
 
-    public PostController(IPostRepository postRepository, UserManager<ApplicationUser> userManager, ILogger<PostController> logger)
+    public PostController(IPostRepository postRepository, UserManager<ApplicationUser> userManager, ILogger<PostController> logger, ILikeRepository likeRepository)
     {
         _postRepository = postRepository;
         _userManager = userManager;
         _logger = logger;
+        _likeRepository = likeRepository;
     }
 
     public async Task<IActionResult> Index()
@@ -27,10 +31,13 @@ public class PostController : Controller
 
         foreach (var post in posts)
         {
+            var isLiked = await _likeRepository.IsLikedAsync(user.Id, post.Id);
+            var likeCount = await _likeRepository.GetLikeCountAsync(post.Id);
             result.Add(new PostViewModel
             {
                 Post = post,
-                
+                IsLikedByCurrentUser = isLiked,
+                LikeCount = likeCount
             });
         }
         
@@ -123,6 +130,26 @@ public class PostController : Controller
         
         await _postRepository.DeleteAsync(id);
         return RedirectToAction("Index");
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var post = await _postRepository.GetByIdAsync(id);
+        if(post == null)
+            return NotFound();
+        
+        var user = await _userManager.GetUserAsync(User);
+        var isLiked = await _likeRepository.IsLikedAsync(user.Id, post.Id);
+        var LikeCount = await _likeRepository.GetLikeCountAsync(post.Id);
+        var comments = await _commentRepository.GetByPostIdAsync(id);
+        var model = new PostDetailsView
+        {
+            Post = post,
+            isLikedByCurrentUser = isLiked,
+            LikeCount = LikeCount,
+            Comments = comments
+        };
+        return View(model);
     }
     
 }

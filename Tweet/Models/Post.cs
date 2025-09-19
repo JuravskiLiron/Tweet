@@ -10,4 +10,6 @@ public class Post
     //Внешний ключ "User"
     public int UserId { get; set; }
     public ApplicationUser User { get; set; }
+    public ICollection<Comment> Comments { get; set; }
+    
 }

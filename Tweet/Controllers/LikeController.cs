@@ -33,7 +33,7 @@ public class LikeController : Controller
         if(post == null)
             return NotFound();
 
-        var isLiked = await _likeRepository.IsLikedAsync(user.Id, post.Id);
+        var isLiked = await _likeRepository.IsLikedAsync(user.Id, PostId);
         if (!isLiked)
         {
             var like = new Like
@@ -59,7 +59,7 @@ public class LikeController : Controller
         if(post == null)
             return NotFound();
         
-        var like = await _likeRepository.GetLikeAsync(user.Id, post.Id);
+        var like = await _likeRepository.GetLikeAsync(user.Id, PostId);
         if(like != null)
             await _likeRepository.RemoveLikeAsync(like);
         

@@ -45,6 +45,7 @@
         <label>Avatar</label>
         <input asp-for="Avatar" type="file" class="form-control" accept=".jpg,.jpeg,.png,.gif"/>
         <span asp-validation-for="Avatar" class="text-danger"></span>
+        //<img id="avatarPreview" src="@Model.CurrentAvatarPath" alt="Avatar Preview" style="max-height: 150px;" />
     </div>
     
     <button type="submit" class="btn btn-primary">Register</button>
@@ -55,6 +56,20 @@
 <div>
     <a asp-action="Login">Already have an account? Login</a>
 </div>
+
+@*@section Scripts{
+    <script>    
+        function previewImage(event){
+            var reader = FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('avatarPreview');
+                output.src = reader.result;
+            };
+            if(event.target.files.length > 0){
+                reader.readAsDataURL(event.target.files[0]);
+            };
+    </script>*@
+}
 
 
 

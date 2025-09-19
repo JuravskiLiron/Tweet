@@ -30,7 +30,7 @@ public class LikeRepository : ILikeRepository
         return await (_context.Likes.FirstOrDefaultAsync(I => I.UserId == UserId && I.PostId == PostId));
     }
 
-    public async Task<int> GetLikesCountAsync(int PostId)
+    public async Task<int> GetLikeCountAsync(int PostId)
     {
         return await (_context.Likes.CountAsync(I => I.PostId == PostId)); 
     }
