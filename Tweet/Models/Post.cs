@@ -11,5 +11,5 @@ public class Post
     public int UserId { get; set; }
     public ApplicationUser User { get; set; }
     public ICollection<Comment> Comments { get; set; }
-    
+    public string? ImagePath { get; set; }
 }

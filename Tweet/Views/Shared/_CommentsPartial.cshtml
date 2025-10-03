@@ -1,0 +1,8 @@
+
+
+@model IEnumerable<Tweet.Models.Comment>
+
+@foreach (var comment in Model.Where(c => c.ParentCommentId == null))
+{
+    <partial name="_CommentWithReplies" model="comment"/>
+}
