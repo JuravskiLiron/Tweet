@@ -4,7 +4,7 @@ using Tweet.Models;
 
 namespace Tweet.Repository;
 
-public class CommentRepository
+public class CommentRepository : ICommentRepository
 {
     private readonly ApplicationDBContext _context;
 
