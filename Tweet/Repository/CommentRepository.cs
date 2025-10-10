@@ -13,13 +13,18 @@ public class CommentRepository
         _context = context;
     }
 
-    public async Task AddAsync(Comment comment)
+    public async Task AddAsync(Comment comment)//+
     {
         _context.Comments.Add(comment);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task UpdateAsync(Comment comment)//+
+    {
+        _context.Comments.Update(comment);
+        await _context.SaveChangesAsync();
+    }
+    public async Task DeleteAsync(int id)//+
     {
         var comment = await _context.Comments.FindAsync(id);
 
@@ -30,9 +35,13 @@ public class CommentRepository
         }
     }
 
-    public async Task<Comment?> GetByIdAsync(int id)
+    public async Task<Comment?> GetByIdAsync(int id)//+
     {
-        return await _context.Comments.FindAsync(id);
+       // return await _context.Comments.FindAsync(id);
+       return await _context.Comments
+           .Include(c=> c.User)
+           .Include(c=> c.Likes)
+           .FirstOrDefaultAsync(c => c.Id == id);
         
     }
 
@@ -88,7 +97,7 @@ public class CommentRepository
      
     }
 
-    public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int postId, int? currentUserId = null)
+    public async Task<IEnumerable<Comment>> GetCommentsForPostAsync(int postId, int? currentUserId = null)
     {
         var comments = await _context.Comments
             .Where(c => c.PostId == postId)

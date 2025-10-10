@@ -15,12 +15,13 @@ public class PostController : Controller
     private readonly ILikeRepository _likeRepository;
     public readonly ICommentRepository _commentRepository;
 
-    public PostController(IPostRepository postRepository, UserManager<ApplicationUser> userManager, ILogger<PostController> logger, ILikeRepository likeRepository)
+    public PostController(IPostRepository postRepository, UserManager<ApplicationUser> userManager, ILogger<PostController> logger, ILikeRepository likeRepository, ICommentRepository commentRepository)
     {
         _postRepository = postRepository;
         _userManager = userManager;
         _logger = logger;
         _likeRepository = likeRepository;
+        _commentRepository = commentRepository;
     }
 
     public async Task<IActionResult> Index()
