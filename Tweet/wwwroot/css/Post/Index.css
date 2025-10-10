@@ -1,0 +1,14 @@
+.post + .post {
+    margin-top:24px; padding-top: 20px;
+    background: 
+            repeating-linear-gradient(90deg, rgba(0, 0, 0, .25) 0 6px, transparent 6px 14px)
+                left top/100% 1px no-repeat;
+    
+}
+
+@media(prefers-color-scheme: dark){
+    .post + .post{
+    background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .25) 0 6px, transparent 6px 14px)
+    left top/100% 1px no-repeat;
+}
+}

@@ -1,5 +1,5 @@
 @model List<PostViewModel>
-
+<link rel="stylesheet" href="~\wwwroot\css\Post\Index.css">
 <h2>Posts</h2>
 <a asp-action="Create" class="btn btn-primary">Create post</a>
 @foreach (var post in Model)
@@ -7,7 +7,8 @@
     
         
     
-    <hr>
+    <hr class="razdelitel-postov"> 
+    
     <div class="post">
         <h4>@post.Post.Title</h4>
         <p>@post.Post.Content</p>

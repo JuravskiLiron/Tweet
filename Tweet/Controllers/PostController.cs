@@ -141,7 +141,7 @@ public class PostController : Controller
         var user = await _userManager.GetUserAsync(User);
         var isLiked = await _likeRepository.IsLikedAsync(user.Id, post.Id);
         var LikeCount = await _likeRepository.GetLikeCountAsync(post.Id);
-        var comments = await _commentRepository.GetByPostIdAsync(post.Id);
+        var comments = await _commentRepository.GetByPostIdAsync(id);
         var model = new PostDetailsView
         {
             Post = post,
